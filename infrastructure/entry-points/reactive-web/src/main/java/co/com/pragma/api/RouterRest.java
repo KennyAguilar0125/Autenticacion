@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.*;
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
+import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
-@Slf4j
 public class RouterRest {
     @Bean
     public WebProperties.Resources resources() {
@@ -114,41 +114,11 @@ public class RouterRest {
                                             )
                                     )
                             )
-                    ),
-                    @RouterOperation(
-                            path = "/api/v1/usuarios/{idUsuario}",
-                            produces = {
-                                    MediaType.APPLICATION_JSON_VALUE
-                            },
-                            method = RequestMethod.DELETE,
-                            beanClass = Handler.class,
-                            beanMethod = "deleteById",
-
-                            operation = @Operation(
-                                    operationId = "deleteById",
-                                    responses = {
-                                            @ApiResponse(
-                                                    responseCode = "204",
-                                                    description = "Se elimina usurio correctamente"
-                                            ),
-                                            @ApiResponse(
-                                                    responseCode = "404",
-                                                    description = "no se encontro usuario por id"
-                                            )
-                                    },
-                                    parameters = {
-                                            @Parameter(
-                                                    in = ParameterIn.PATH,
-                                                    name = "idUsuario"
-                                            )
-                                    }
-                            )
-                    ),
+                    )
             })
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(GET("/api/v1/usuarios"), handler::findAll)
                 .andRoute(GET("/api/v1/usuarios/{idUsuario}"), handler::findById)
-                .andRoute(POST("/api/v1/usuarios"), handler::save)
-                .andRoute(DELETE("/api/v1/usuarios/{idUsuario}"), handler::deleteById);
+                .andRoute(POST("/api/v1/usuarios"), handler::save);
     }
 }

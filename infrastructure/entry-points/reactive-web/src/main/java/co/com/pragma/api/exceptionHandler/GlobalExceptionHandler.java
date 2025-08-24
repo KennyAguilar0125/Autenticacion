@@ -1,6 +1,7 @@
 package co.com.pragma.api.exceptionHandler;
 
 import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -24,6 +25,7 @@ import java.util.Map;
  * Esta es la que captura la excepcion
  */
 @Component
+@Slf4j
 public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
 
 
@@ -49,6 +51,7 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
         Map<String, Object> errorProperties = getErrorAttributes(request, ErrorAttributeOptions.defaults());
         Throwable error = getError(request);
         HttpStatus status = getHttpStatus(error);
+        log.error("Error en {} ( {} )", request.path(), error.getMessage());
         return ServerResponse.status(status).contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(errorProperties));
     }
 
