@@ -31,10 +31,6 @@ public class UserUseCase implements IUserUseCase {
                 );
     }
 
-    public Mono<Void> deleteById(String idUser) {
-        return userRepository.deleteById(idUser);
-    }
-
     public Mono<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }

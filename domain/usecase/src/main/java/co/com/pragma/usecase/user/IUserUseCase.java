@@ -12,8 +12,6 @@ public interface IUserUseCase {
 
     Mono<User> save(User user);
 
-    Mono<Void> deleteById(String idUser);
-
     Mono<User> findByEmail(String email);
 
     Mono<User> findByDocumentNumber(String documentNumber);

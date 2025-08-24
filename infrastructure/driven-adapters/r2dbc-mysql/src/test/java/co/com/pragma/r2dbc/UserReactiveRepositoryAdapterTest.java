@@ -32,7 +32,6 @@ class UserReactiveRepositoryAdapterTest {
     ObjectMapper mapper;
 
     UUID uuid = UUID.randomUUID();
-    UUID uuid2 = UUID.randomUUID();
     LocalDate date = LocalDate.of(1999, 1, 25);
     BigDecimal salary = BigDecimal.TEN;
 
@@ -61,7 +60,7 @@ class UserReactiveRepositoryAdapterTest {
             .build();
 
     @Test
-    void shouldFindTaskById() {
+    void shouldFindById() {
 
         when(mapper.map(userEntity, User.class)).thenReturn(user);
 
@@ -76,7 +75,7 @@ class UserReactiveRepositoryAdapterTest {
     }
 
     @Test
-    void shouldFindAllTask() {
+    void shouldFindAll() {
         when(mapper.map(userEntity, User.class)).thenReturn(user);
         when(repository.findAll()).thenReturn(Flux.just(userEntity));
 
@@ -88,7 +87,7 @@ class UserReactiveRepositoryAdapterTest {
     }
 
     @Test
-    void shouldSaveTask() {
+    void shouldSave() {
         when(mapper.map(userEntity, User.class)).thenReturn(user);
         when(mapper.map(user, UserEntity.class)).thenReturn(userEntity);
         when(repository.save(userEntity)).thenReturn(Mono.just(userEntity));
@@ -97,6 +96,34 @@ class UserReactiveRepositoryAdapterTest {
 
         StepVerifier.create(result)
                 .expectNext(user)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldFindByEmail() {
+
+        when(mapper.map(userEntity, User.class)).thenReturn(user);
+        when(repository.findByEmail("correo@gmail.com")).thenReturn(Mono.just(userEntity));
+
+        Mono<User> result = repositoryAdapter.findByEmail("correo@gmail.com");
+
+        StepVerifier.create(result)
+                .expectNextMatches(t -> t.getIdUser().equals(uuid.toString())
+                        && t.getEmail().equals("correo@gmail.com"))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldFindByDocumentNumber() {
+
+        when(mapper.map(userEntity, User.class)).thenReturn(user);
+        when(repository.findByDocumentNumber("1234")).thenReturn(Mono.just(userEntity));
+
+        Mono<User> result = repositoryAdapter.findByDocumentNumber("1234");
+
+        StepVerifier.create(result)
+                .expectNextMatches(t -> t.getIdUser().equals(uuid.toString())
+                        && t.getDocumentNumber().equals("1234"))
                 .verifyComplete();
     }
 }

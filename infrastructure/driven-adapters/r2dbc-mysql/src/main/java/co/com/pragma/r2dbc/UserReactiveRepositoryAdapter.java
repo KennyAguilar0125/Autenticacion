@@ -19,16 +19,11 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
         super(repository, mapper, d -> mapper.map(d, User.class));
     }
 
-    @Override
-    public Mono<Void> deleteById(String idUser) {
-        return repository.deleteById(idUser);
-    }
-
     public Mono<User> findByEmail(String email) {
-        return repository.findByEmail(email);
+        return repository.findByEmail(email).map(this::toEntity);
     }
 
     public Mono<User> findByDocumentNumber(String documentNumber) {
-        return repository.findByDocumentNumber(documentNumber);
+        return repository.findByDocumentNumber(documentNumber).map(this::toEntity);
     }
 }
