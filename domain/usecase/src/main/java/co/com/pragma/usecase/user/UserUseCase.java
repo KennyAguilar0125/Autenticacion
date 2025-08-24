@@ -20,10 +20,26 @@ public class UserUseCase implements IUserUseCase {
     }
 
     public Mono<User> save(User user) {
-        return userRepository.save(user);
+        return findByEmail(user.getEmail())
+                .flatMap(existing -> Mono.<User>error(new IllegalArgumentException("El email ya está registrado")))
+                .switchIfEmpty(
+                        findByDocumentNumber(user.getDocumentNumber())
+                                .flatMap(existing -> Mono.<User>error(new IllegalArgumentException("El documentNumber ya está registrado")))
+                                .switchIfEmpty(
+                                        userRepository.save(user)
+                                )
+                );
     }
 
     public Mono<Void> deleteById(String idUser) {
         return userRepository.deleteById(idUser);
+    }
+
+    public Mono<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public Mono<User> findByDocumentNumber(String documentNumber) {
+        return userRepository.findByDocumentNumber(documentNumber);
     }
 }

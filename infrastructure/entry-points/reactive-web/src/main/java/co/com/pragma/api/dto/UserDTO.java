@@ -22,8 +22,8 @@ public class UserDTO {
     private LocalDate birthDate;
     private String address;
     private String phoneNumber;
-    @NotBlank(message = "no puder estar vacio o nulo")
-    @Email(message = "email debe tener formato valido")
+    @NotBlank(message = "no puede estar vacio o nulo")
+    @Email(message = "debe tener formato valido")
     private String email;
     @DecimalMin(value = "0.00", message = "minimo debe ser de 0")
     @DecimalMax(value = "15000000", message = "maximo debe ser 15000000")

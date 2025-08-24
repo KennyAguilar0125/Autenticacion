@@ -39,4 +39,12 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     public Mono<Void> deleteById(String idUser) {
         return repository.deleteById(idUser);
     }
+
+    public Mono<User> findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
+    public Mono<User> findByDocumentNumber(String documentNumber) {
+        return repository.findByDocumentNumber(documentNumber);
+    }
 }
