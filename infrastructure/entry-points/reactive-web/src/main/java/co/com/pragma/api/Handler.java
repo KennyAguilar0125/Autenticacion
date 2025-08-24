@@ -1,10 +1,11 @@
 package co.com.pragma.api;
 
-import co.com.pragma.model.user.User;
+import co.com.pragma.api.dto.UserDTO;
+import co.com.pragma.api.mapper.UserDTOMapper;
+import co.com.pragma.r2dbc.helper.utilities.ValidationHandler;
 import co.com.pragma.usecase.user.IUserUseCase;
-import co.com.pragma.usecase.user.UserUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -12,32 +13,35 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class Handler {
     private final IUserUseCase userUseCase;
-
+    private final UserDTOMapper userDTOMapper;
+    private final ValidationHandler validationHandler;
 
     public Mono<ServerResponse> findAll(ServerRequest serverRequest) {
-        return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(userUseCase.findAll(), User.class);
+        return userUseCase.findAll()
+                .collectList()
+                .flatMap(listUser -> ServerResponse.ok().bodyValue(userDTOMapper.toResponseList(listUser)))
+                .onErrorResume(e -> ServerResponse.badRequest().bodyValue(e.getMessage()));
     }
 
     public Mono<ServerResponse> findById(ServerRequest serverRequest) {
         String id = serverRequest.pathVariable("idUsuario");
 
         return userUseCase.findById(id)
-                .flatMap(task -> ServerResponse.ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(task))
+                .flatMap(user -> ServerResponse.ok().bodyValue(userDTOMapper.toResponse(user)))
+                .onErrorResume(ex -> ServerResponse.notFound().build())
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 
     public Mono<ServerResponse> save(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(User.class)
+        return serverRequest.bodyToMono(UserDTO.class)
+                .flatMap(validationHandler::validate)
+                .map(userDTOMapper::toModel)
                 .flatMap(userUseCase::save)
-                .flatMap(savedTask -> ServerResponse.ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(savedTask));
+                .map(userDTOMapper::toResponse)
+                .flatMap(ServerResponse.ok()::bodyValue);
     }
 
     public Mono<ServerResponse> deleteById(ServerRequest serverRequest) {

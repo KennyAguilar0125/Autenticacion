@@ -1,14 +1,12 @@
 server:
   port: 8080
+  error:
+    include-message: always
 spring:
   application:
     name: "Autenticacion"
   devtools:
     add-properties: false
-  h2:
-    console:
-      enabled: true
-      path: "/h2"
   profiles:
     include: null
 management:
@@ -30,3 +28,9 @@ adapters:
     database: "autenticacion"
     username: "root"
     password: "r@ot25"
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v1/usuarios
