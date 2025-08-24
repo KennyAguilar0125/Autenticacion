@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Table("usuarios")
+@Table("usuario")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
