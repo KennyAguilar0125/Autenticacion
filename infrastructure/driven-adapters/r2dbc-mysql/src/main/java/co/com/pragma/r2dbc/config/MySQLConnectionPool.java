@@ -2,7 +2,6 @@ package co.com.pragma.r2dbc.config;
 
 import io.asyncer.r2dbc.mysql.MySqlConnectionConfiguration;
 import io.asyncer.r2dbc.mysql.MySqlConnectionFactory;
-import io.asyncer.r2dbc.mysql.constant.SslMode;
 import io.r2dbc.pool.ConnectionPool;
 import io.r2dbc.pool.ConnectionPoolConfiguration;
 import io.r2dbc.spi.ConnectionFactory;
