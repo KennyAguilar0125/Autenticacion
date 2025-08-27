@@ -4,6 +4,8 @@ import co.com.pragma.model.user.User;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 public interface IUserUseCase {
 
     Mono<User> findById(String idUser);
@@ -15,4 +17,6 @@ public interface IUserUseCase {
     Mono<User> findByEmail(String email);
 
     Mono<User> findByDocumentNumber(String documentNumber);
+
+    Flux<User> saveAll(List<User> users);
 }

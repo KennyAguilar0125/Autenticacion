@@ -118,6 +118,7 @@ public class RouterRest {
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(GET("/api/v1/usuarios"), handler::findAll)
                 .andRoute(GET("/api/v1/usuarios/{idUsuario}"), handler::findById)
-                .andRoute(POST("/api/v1/usuarios"), handler::save);
+                .andRoute(POST("/api/v1/usuarios"), handler::save)
+                .andRoute(POST("/api/v1/usuarios/all"), handler::saveAll);
     }
 }

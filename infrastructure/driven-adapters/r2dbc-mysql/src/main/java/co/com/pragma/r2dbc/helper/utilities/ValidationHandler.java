@@ -6,6 +6,7 @@ import jakarta.validation.Validator;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -27,5 +28,17 @@ public class ValidationHandler {
             }
             return Mono.just(object);
         });
+    }
+
+    public <T> Mono<List<T>> validateList(List<T> list) {
+        // Validamos cada elemento de la lista
+        for (T item : list) {
+            Set<ConstraintViolation<T>> violations = validator.validate(item);
+            if (!violations.isEmpty()) {
+                // Si hay violaciones, lanzamos la excepción
+                return Mono.error(new ConstraintViolationException(violations));
+            }
+        }
+        return Mono.just(list);  // Si todos son válidos, retornamos la lista original
     }
 }

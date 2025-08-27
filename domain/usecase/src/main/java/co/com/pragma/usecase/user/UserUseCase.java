@@ -1,15 +1,19 @@
 package co.com.pragma.usecase.user;
 
+import co.com.pragma.model.common.TransactionPort;
 import co.com.pragma.model.user.User;
 import co.com.pragma.model.user.gateways.UserRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class UserUseCase implements IUserUseCase {
 
     private final UserRepository userRepository;
+    private final TransactionPort transactionPort;
 
     public Mono<User> findById(String idUser) {
         return userRepository.findById(idUser);
@@ -20,15 +24,18 @@ public class UserUseCase implements IUserUseCase {
     }
 
     public Mono<User> save(User user) {
-        return findByEmail(user.getEmail())
-                .flatMap(existing -> Mono.<User>error(new IllegalArgumentException("El email ya está registrado")))
-                .switchIfEmpty(
-                        findByDocumentNumber(user.getDocumentNumber())
-                                .flatMap(existing -> Mono.<User>error(new IllegalArgumentException("El documentNumber ya está registrado")))
-                                .switchIfEmpty(
-                                        userRepository.save(user)
-                                )
-                );
+        return transactionPort.write(() ->
+                findByEmail(user.getEmail())
+                        .flatMap(existing -> Mono.<User>error(new IllegalArgumentException("El email ya está registrado")))
+                        .switchIfEmpty(
+                                findByDocumentNumber(user.getDocumentNumber())
+                                        .flatMap(existing -> Mono.<User>error(new IllegalArgumentException("El documentNumber ya está registrado")))
+                                        .switchIfEmpty(
+                                                // Guardamos el usuario dentro de la transacción
+                                                userRepository.save(user)
+                                        )
+                        )
+        );
     }
 
     public Mono<User> findByEmail(String email) {
@@ -37,5 +44,12 @@ public class UserUseCase implements IUserUseCase {
 
     public Mono<User> findByDocumentNumber(String documentNumber) {
         return userRepository.findByDocumentNumber(documentNumber);
+    }
+
+    public Flux<User> saveAll(List<User> users) {
+        return transactionPort.writeMany(() ->
+                Flux.fromIterable(users)
+                        .flatMap(this::save)
+        );
     }
 }

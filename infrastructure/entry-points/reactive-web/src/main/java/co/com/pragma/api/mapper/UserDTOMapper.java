@@ -13,4 +13,6 @@ public interface UserDTOMapper {
     List<UserDTO> toResponseList(List<User> user);
 
     User toModel(UserDTO userDTO);
+
+    List<User> toModelList(List<UserDTO> userDTO);
 }
