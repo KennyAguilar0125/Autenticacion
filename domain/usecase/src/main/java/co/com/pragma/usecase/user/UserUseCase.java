@@ -1,7 +1,7 @@
 package co.com.pragma.usecase.user;
 
 import co.com.pragma.model.common.TransactionPort;
-import co.com.pragma.model.exeptions.FieldAlreadyRegisteredException;
+import co.com.pragma.model.exception.FieldAlreadyRegisteredException;
 import co.com.pragma.model.user.User;
 import co.com.pragma.model.user.gateways.UserRepository;
 import lombok.RequiredArgsConstructor;

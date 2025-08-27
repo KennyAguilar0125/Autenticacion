@@ -1,4 +1,4 @@
-package co.com.pragma.model.exeptions;
+package co.com.pragma.model.exception;
 
 public class FieldAlreadyRegisteredException extends RuntimeException{
 
