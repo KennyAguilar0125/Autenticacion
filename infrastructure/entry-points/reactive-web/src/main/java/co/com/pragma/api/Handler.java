@@ -75,4 +75,17 @@ public class Handler {
                     return ServerResponse.status(HttpStatus.CREATED).bodyValue(savedUsers);
                 });
     }
+
+    public Mono<ServerResponse> findByDocumentNumber(ServerRequest request) {
+        log.debug("Entra servicio findByDocumentNumber en Usuarios");
+
+        final String documentNumber = request.pathVariable("documentNumber");
+
+        return userUseCase.findByDocumentNumber(documentNumber)
+                .flatMap(user -> ServerResponse.ok().bodyValue(userDTOMapper.toResponse(user)))
+                .switchIfEmpty(Mono.defer(() -> {
+                    log.warn("Usuario {} no encontrado", documentNumber);
+                    return ServerResponse.noContent().build();
+                }));
+    }
 }

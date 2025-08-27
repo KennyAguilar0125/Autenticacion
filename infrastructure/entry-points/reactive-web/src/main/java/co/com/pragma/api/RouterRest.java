@@ -55,6 +55,38 @@ public class RouterRest {
                             )
                     ),
                     @RouterOperation(
+                            path = "/api/v1/usuarios/findByDocumentNumber/{documentNumber}",
+                            produces = {
+                                    MediaType.APPLICATION_JSON_VALUE
+                            },
+                            method = RequestMethod.GET,
+                            beanClass = Handler.class,
+                            beanMethod = "findByDocumentNumber",
+
+                            operation = @Operation(
+                                    operationId = "findByDocumentNumber",
+                                    responses = {
+                                            @ApiResponse(
+                                                    responseCode = "200",
+                                                    description = "trae un usuario por numero de documento.",
+                                                    content = @Content(schema = @Schema(
+                                                            implementation = UserDTO.class
+                                                    ))
+                                            ),
+                                            @ApiResponse(
+                                                    responseCode = "404",
+                                                    description = "no se encontro usuario por umero de documento"
+                                            )
+                                    },
+                                    parameters = {
+                                            @Parameter(
+                                                    in = ParameterIn.PATH,
+                                                    name = "documentNumber"
+                                            )
+                                    }
+                            )
+                    ),
+                    @RouterOperation(
                             path = "/api/v1/usuarios/{idUsuario}",
                             produces = {
                                     MediaType.APPLICATION_JSON_VALUE
@@ -118,6 +150,7 @@ public class RouterRest {
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(GET("/api/v1/usuarios"), handler::findAll)
                 .andRoute(GET("/api/v1/usuarios/{idUsuario}"), handler::findById)
+                .andRoute(GET("/api/v1/usuarios/findByDocumentNumber/{documentNumber}"), handler::findByDocumentNumber)
                 .andRoute(POST("/api/v1/usuarios"), handler::save)
                 .andRoute(POST("/api/v1/usuarios/all"), handler::saveAll);
     }
