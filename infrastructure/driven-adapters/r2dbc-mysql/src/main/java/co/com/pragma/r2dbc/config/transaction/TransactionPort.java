@@ -1,4 +1,4 @@
-package co.com.pragma.model.common;
+package co.com.pragma.r2dbc.config.transaction;
 
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;

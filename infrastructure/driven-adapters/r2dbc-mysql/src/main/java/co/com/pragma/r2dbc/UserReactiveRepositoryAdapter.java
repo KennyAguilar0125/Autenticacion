@@ -2,6 +2,7 @@ package co.com.pragma.r2dbc;
 
 import co.com.pragma.model.user.User;
 import co.com.pragma.model.user.gateways.UserRepository;
+import co.com.pragma.r2dbc.config.transaction.TransactionPort;
 import co.com.pragma.r2dbc.entity.UserEntity;
 import co.com.pragma.r2dbc.helper.ReactiveAdapterOperations;
 import org.reactivecommons.utils.ObjectMapper;
@@ -15,8 +16,8 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
         String,
         UserReactiveRepository
         > implements UserRepository {
-    public UserReactiveRepositoryAdapter(UserReactiveRepository repository, ObjectMapper mapper) {
-        super(repository, mapper, d -> mapper.map(d, User.class));
+    public UserReactiveRepositoryAdapter(UserReactiveRepository repository, ObjectMapper mapper, TransactionPort transactionPort) {
+        super(repository, mapper, d -> mapper.map(d, User.class), transactionPort);
     }
 
     public Mono<User> findByEmail(String email) {

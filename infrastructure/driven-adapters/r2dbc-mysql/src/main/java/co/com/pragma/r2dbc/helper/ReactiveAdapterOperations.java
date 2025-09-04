@@ -1,5 +1,6 @@
 package co.com.pragma.r2dbc.helper;
 
+import co.com.pragma.r2dbc.config.transaction.TransactionPort;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.Example;
 import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
@@ -15,11 +16,13 @@ public abstract class ReactiveAdapterOperations<E, D, I, R extends ReactiveCrudR
     protected ObjectMapper mapper;
     private final Class<D> dataClass;
     private final Function<D, E> toEntityFn;
+    private final TransactionPort transactionPort;
 
     @SuppressWarnings("unchecked")
-    protected ReactiveAdapterOperations(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {
+    protected ReactiveAdapterOperations(R repository, ObjectMapper mapper, Function<D, E> toEntityFn, TransactionPort transactionPort) {
         this.repository = repository;
         this.mapper = mapper;
+        this.transactionPort = transactionPort;
         ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
         this.dataClass = (Class<D>) genericSuperclass.getActualTypeArguments()[1];
         this.toEntityFn = toEntityFn;
@@ -34,13 +37,17 @@ public abstract class ReactiveAdapterOperations<E, D, I, R extends ReactiveCrudR
     }
 
     public Mono<E> save(E entity) {
-        return saveData(toData(entity))
-                .map(this::toEntity);
+        return transactionPort.write(() ->
+                saveData(toData(entity))
+                .map(this::toEntity)
+        );
     }
 
     protected Flux<E> saveAllEntities(Flux<E> entities) {
-        return saveData(entities.map(this::toData))
-                .map(this::toEntity);
+        return transactionPort.writeMany(() ->
+                saveData(entities.map(this::toData))
+                .map(this::toEntity)
+        );
     }
 
     protected Mono<D> saveData(D data) {

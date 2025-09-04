@@ -1,4 +1,4 @@
-package co.com.pragma.r2dbc.helper.utilities;
+package co.com.pragma.api.validation;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;

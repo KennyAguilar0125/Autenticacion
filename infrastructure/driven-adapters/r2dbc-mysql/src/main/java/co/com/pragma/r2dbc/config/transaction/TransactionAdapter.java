@@ -1,6 +1,5 @@
 package co.com.pragma.r2dbc.config.transaction;
 
-import co.com.pragma.model.common.TransactionPort;
 import lombok.RequiredArgsConstructor;
 import org.reactivestreams.Publisher;
 import org.springframework.stereotype.Component;

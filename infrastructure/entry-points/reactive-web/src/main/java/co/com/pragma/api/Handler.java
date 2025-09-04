@@ -2,7 +2,7 @@ package co.com.pragma.api;
 
 import co.com.pragma.api.dto.UserDTO;
 import co.com.pragma.api.mapper.UserDTOMapper;
-import co.com.pragma.r2dbc.helper.utilities.ValidationHandler;
+import co.com.pragma.api.validation.ValidationHandler;
 import co.com.pragma.usecase.user.IUserUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
