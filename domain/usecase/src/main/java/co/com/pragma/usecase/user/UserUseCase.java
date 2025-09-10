@@ -3,6 +3,8 @@ package co.com.pragma.usecase.user;
 import co.com.pragma.model.exception.FieldAlreadyRegisteredException;
 import co.com.pragma.model.user.User;
 import co.com.pragma.model.user.gateways.UserRepository;
+import co.com.pragma.model.user.security.LogIn;
+import co.com.pragma.model.user.security.ResponseToken;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -52,4 +54,11 @@ public class UserUseCase implements IUserUseCase {
                 .flatMap(this::save);
 
     }
+
+    @Override
+    public Mono<ResponseToken> login(LogIn dto) {
+        return userRepository.login(dto);
+    }
+
+
 }

@@ -12,3 +12,11 @@ CREATE TABLE usuarios (
     UNIQUE (correo_electronico),                  -- Correo único
     UNIQUE (numero_documento)                     -- Número de documento único
 );
+
+CREATE TABLE rol (
+    id_rol CHAR(36) NOT NULL DEFAULT (UUID()),
+    codigo VARCHAR(100) NOT NULL,
+    nombre VARCHAR(255) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id_rol)
+);

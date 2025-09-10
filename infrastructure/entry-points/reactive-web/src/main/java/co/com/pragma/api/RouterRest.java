@@ -1,6 +1,9 @@
 package co.com.pragma.api;
 
-import co.com.pragma.api.dto.UserDTO;
+import co.com.pragma.api.rol.RolHandler;
+import co.com.pragma.api.security.SecurityHandler;
+import co.com.pragma.api.user.dto.UserDTO;
+import co.com.pragma.api.user.UserHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -8,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springdoc.core.annotations.RouterOperations;
 import org.springframework.boot.autoconfigure.web.WebProperties;
@@ -23,11 +27,16 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
+@RequiredArgsConstructor
 public class RouterRest {
     @Bean
     public WebProperties.Resources resources() {
         return new WebProperties.Resources();
     }
+
+    private final UserHandler userHandler;
+    private final RolHandler rolHandler;
+    private final SecurityHandler securityHandler;
 
     @Bean
     @RouterOperations
@@ -38,7 +47,7 @@ public class RouterRest {
                                     MediaType.APPLICATION_JSON_VALUE
                             },
                             method = RequestMethod.GET,
-                            beanClass = Handler.class,
+                            beanClass = UserHandler.class,
                             beanMethod = "findAll",
 
                             operation = @Operation(
@@ -60,7 +69,7 @@ public class RouterRest {
                                     MediaType.APPLICATION_JSON_VALUE
                             },
                             method = RequestMethod.GET,
-                            beanClass = Handler.class,
+                            beanClass = UserHandler.class,
                             beanMethod = "findByDocumentNumber",
 
                             operation = @Operation(
@@ -92,7 +101,7 @@ public class RouterRest {
                                     MediaType.APPLICATION_JSON_VALUE
                             },
                             method = RequestMethod.GET,
-                            beanClass = Handler.class,
+                            beanClass = UserHandler.class,
                             beanMethod = "findById",
 
                             operation = @Operation(
@@ -124,7 +133,7 @@ public class RouterRest {
                                     MediaType.APPLICATION_JSON_VALUE
                             },
                             method = RequestMethod.POST,
-                            beanClass = Handler.class,
+                            beanClass = UserHandler.class,
                             beanMethod = "save",
 
                             operation = @Operation(
@@ -147,11 +156,18 @@ public class RouterRest {
                             )
                     )
             })
-    public RouterFunction<ServerResponse> routerFunction(Handler handler) {
-        return route(GET("/api/v1/usuarios"), handler::findAll)
-                .andRoute(GET("/api/v1/usuarios/{idUsuario}"), handler::findById)
-                .andRoute(GET("/api/v1/usuarios/findByDocumentNumber/{documentNumber}"), handler::findByDocumentNumber)
-                .andRoute(POST("/api/v1/usuarios"), handler::save)
-                .andRoute(POST("/api/v1/usuarios/all"), handler::saveAll);
+    public RouterFunction<ServerResponse> routerFunction() {
+        return route(GET("/api/v1/usuarios"), userHandler::findAll)
+                .andRoute(GET("/api/v1/usuarios/{idUsuario}"), userHandler::findById)
+                .andRoute(GET("/api/v1/usuarios/findByDocumentNumber/{documentNumber}"), userHandler::findByDocumentNumber)
+                .andRoute(POST("/api/v1/usuarios"), userHandler::save)
+                .andRoute(POST("/api/v1/usuarios/all"), userHandler::saveAll)
+                //rol
+                .andRoute(GET("/api/v1/roles"), rolHandler::findAll)
+                .andRoute(GET("/api/v1/roles/{idRol}"), rolHandler::findById)
+                .andRoute(POST("/api/v1/roles"), rolHandler::save)
+                //Security
+                .andRoute(POST("/api/v1/login"), securityHandler::logIn)
+                ;
     }
 }

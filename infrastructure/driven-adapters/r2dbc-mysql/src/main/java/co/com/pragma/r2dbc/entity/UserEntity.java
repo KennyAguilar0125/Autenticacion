@@ -46,4 +46,7 @@ public class UserEntity {
 
     @Column("salario_base")
     private BigDecimal baseSalary;
+
+    @Column("contrasena")
+    private String password;
 }

@@ -1,6 +1,8 @@
 package co.com.pragma.usecase.user;
 
 import co.com.pragma.model.user.User;
+import co.com.pragma.model.user.security.LogIn;
+import co.com.pragma.model.user.security.ResponseToken;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -19,4 +21,6 @@ public interface IUserUseCase {
     Mono<User> findByDocumentNumber(String documentNumber);
 
     Flux<User> saveAll(List<User> users);
+
+    Mono<ResponseToken> login(LogIn dto);
 }

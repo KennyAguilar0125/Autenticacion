@@ -2,6 +2,8 @@ package co.com.pragma.r2dbc;
 
 import co.com.pragma.model.user.User;
 import co.com.pragma.r2dbc.entity.UserEntity;
+import co.com.pragma.r2dbc.impl.user.UserReactiveRepository;
+import co.com.pragma.r2dbc.impl.user.UserReactiveRepositoryAdapter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

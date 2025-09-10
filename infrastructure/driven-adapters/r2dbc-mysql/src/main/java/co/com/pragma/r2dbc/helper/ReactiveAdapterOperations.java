@@ -39,14 +39,14 @@ public abstract class ReactiveAdapterOperations<E, D, I, R extends ReactiveCrudR
     public Mono<E> save(E entity) {
         return transactionPort.write(() ->
                 saveData(toData(entity))
-                .map(this::toEntity)
+                        .map(this::toEntity)
         );
     }
 
     protected Flux<E> saveAllEntities(Flux<E> entities) {
         return transactionPort.writeMany(() ->
                 saveData(entities.map(this::toData))
-                .map(this::toEntity)
+                        .map(this::toEntity)
         );
     }
 

@@ -1,7 +1,7 @@
-package co.com.pragma.api;
+package co.com.pragma.api.user;
 
-import co.com.pragma.api.dto.UserDTO;
-import co.com.pragma.api.mapper.UserDTOMapper;
+import co.com.pragma.api.user.dto.UserDTO;
+import co.com.pragma.api.user.mapper.UserDTOMapper;
 import co.com.pragma.api.validation.ValidationHandler;
 import co.com.pragma.usecase.user.IUserUseCase;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class Handler {
+public class UserHandler {
     private final IUserUseCase userUseCase;
     private final UserDTOMapper userDTOMapper;
     private final ValidationHandler validationHandler;

@@ -1,6 +1,7 @@
 package co.com.pragma.r2dbc.helper;
 
 import co.com.pragma.r2dbc.config.transaction.TransactionPort;
+import co.com.pragma.securityjwt.jwt.JwtProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

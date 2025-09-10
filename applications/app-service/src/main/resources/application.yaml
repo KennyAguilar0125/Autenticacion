@@ -38,3 +38,7 @@ springdoc:
 logging:
   level:
     co.com.pragma: DEBUG
+
+jwt:
+  secret: b96fdf257931365584ac4eb5e93add39fabd52a5cd7297a5918b0c0204d76e3f
+  expiration: 3600000

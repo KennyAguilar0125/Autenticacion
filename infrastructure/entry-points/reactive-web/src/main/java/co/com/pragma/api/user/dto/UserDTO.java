@@ -1,4 +1,4 @@
-package co.com.pragma.api.dto;
+package co.com.pragma.api.user.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -29,4 +29,6 @@ public class UserDTO {
     @DecimalMax(value = "15000000", message = "maximo debe ser 15000000")
     @Digits(integer = 15, fraction = 0, message = "Formato de salario inválido")
     private BigDecimal baseSalary;
+    @NotBlank(message = "no puede estar vacio o nulo")
+    private String password;
 }
