@@ -1,8 +1,8 @@
 package co.com.pragma.usecase.user;
 
 import co.com.pragma.model.user.User;
-import co.com.pragma.model.user.security.LogIn;
-import co.com.pragma.model.user.security.ResponseToken;
+import co.com.pragma.model.security.LogIn;
+import co.com.pragma.model.security.ResponseToken;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

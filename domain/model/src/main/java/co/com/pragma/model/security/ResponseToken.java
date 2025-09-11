@@ -1,4 +1,4 @@
-package co.com.pragma.model.user.security;
+package co.com.pragma.model.security;
 
 import lombok.*;
 
@@ -7,7 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class LogIn {
-    String email;
-    String password;
+public class ResponseToken {
+    private String token;
 }
