@@ -39,7 +39,8 @@ public class SecurityConfig {
                 .authorizeExchange(exchangeSpec -> exchangeSpec
                         .pathMatchers("/api/v1/login/**").permitAll()
                         .pathMatchers("/api/v1/roles/**").hasAnyRole(RoleEnum.ASESOR.name(), RoleEnum.ADMIN.name())
-                        .pathMatchers("/api/v1/usuarios/**").hasAnyRole(RoleEnum.ASESOR.name(), RoleEnum.ADMIN.name())
+                        .pathMatchers("/api/v1/usuarios/findByDocumentNumber/**").permitAll()
+                        .pathMatchers("/api/v1/usuarios/**").hasAnyRole(RoleEnum.ASESOR.name(), RoleEnum.ADMIN.name(), RoleEnum.CLIENTE.name())
                         .anyExchange().authenticated())
                 .exceptionHandling(exceptionHandlingSpec -> exceptionHandlingSpec
                         .accessDeniedHandler((exchange, exception) -> Mono.error(exception)))

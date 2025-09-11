@@ -16,7 +16,7 @@ public class JwtFilter implements WebFilter {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getPath().value();
 
-        if (path.contains("/api/v1/login"))
+        if (path.contains("/api/v1/login") || path.contains("/api/v1/usuarios/findByDocumentNumber"))
             return chain.filter(exchange);
 
         String auth = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
