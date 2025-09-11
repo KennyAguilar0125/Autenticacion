@@ -2,6 +2,8 @@ package co.com.pragma.r2dbc.entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -49,4 +51,7 @@ public class UserEntity {
 
     @Column("contrasena")
     private String password;
+
+    @Column("id_rol")
+    private String idRol;
 }

@@ -31,4 +31,6 @@ public class UserDTO {
     private BigDecimal baseSalary;
     @NotBlank(message = "no puede estar vacio o nulo")
     private String password;
+    @NotBlank(message = "no puede estar vacio o nulo")
+    private String idRol;
 }

@@ -12,6 +12,8 @@ public class RolDTO {
 
     private String idRol;
     @NotBlank(message = "no puede estar vacio o nulo")
+    private String code;
+    @NotBlank(message = "no puede estar vacio o nulo")
     private String name;
     @NotBlank(message = "no puede estar vacio o nulo")
     private String description;

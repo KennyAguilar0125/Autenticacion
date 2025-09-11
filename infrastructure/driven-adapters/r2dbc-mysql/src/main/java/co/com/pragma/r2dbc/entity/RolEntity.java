@@ -20,6 +20,9 @@ public class RolEntity {
     @Column("id_rol")
     private String idRol;
 
+    @Column("codigo")
+    private String code;
+
     @Column("nombre")
     private String name;
 
