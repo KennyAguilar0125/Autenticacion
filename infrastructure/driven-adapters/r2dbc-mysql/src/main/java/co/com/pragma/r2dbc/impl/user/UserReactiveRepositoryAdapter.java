@@ -1,5 +1,6 @@
 package co.com.pragma.r2dbc.impl.user;
 
+import co.com.pragma.model.rol.gateways.RolRepository;
 import co.com.pragma.model.user.User;
 import co.com.pragma.model.user.gateways.UserRepository;
 import co.com.pragma.model.user.security.LogIn;
@@ -23,6 +24,7 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
         > implements UserRepository {
     private JwtProvider jwtProvider;
     private PasswordEncoder passwordEncoder;
+    private RolRepository rolRepository;
 
     public UserReactiveRepositoryAdapter(UserReactiveRepository repository, ObjectMapper mapper, TransactionPort transactionPort) {
         super(repository, mapper, d -> mapper.map(d, User.class), transactionPort);
@@ -36,6 +38,11 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     @Autowired
     public void setPasswordEncoder(org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Autowired
+    public void setRolRepository(RolRepository rolRepository) {
+        this.rolRepository = rolRepository;
     }
 
     public Mono<User> findByEmail(String email) {
@@ -56,7 +63,8 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     public Mono<ResponseToken> login(LogIn logIn) {
         return findByEmail(logIn.getEmail())
                 .filter(user -> passwordEncoder.matches(logIn.getPassword(), user.getPassword()))
-                .map(user -> new ResponseToken(jwtProvider.generateToken(user)))
+                .flatMap(user -> rolRepository.findById(user.getIdRol())
+                        .map(role -> new ResponseToken(jwtProvider.generateToken(user, role.getCode()))))
                 .switchIfEmpty(Mono.error(new Throwable("bad credentials")));
     }
 }

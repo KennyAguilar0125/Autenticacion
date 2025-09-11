@@ -1,5 +1,6 @@
 package co.com.pragma.securityjwt.config;
 
+import co.com.pragma.model.enums.RoleEnum;
 import co.com.pragma.securityjwt.jwt.JwtFilter;
 import co.com.pragma.securityjwt.repository.SecurityContextRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,8 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchangeSpec -> exchangeSpec
                         .pathMatchers("/api/v1/login/**").permitAll()
-                        .pathMatchers("/api/v1/roles/**").hasRole("ASESOR")
+                        .pathMatchers("/api/v1/roles/**").hasAnyRole(RoleEnum.ASESOR.name(), RoleEnum.ADMIN.name())
+                        .pathMatchers("/api/v1/usuarios/**").hasAnyRole(RoleEnum.ASESOR.name(), RoleEnum.ADMIN.name())
                         .anyExchange().authenticated())
                 .exceptionHandling(exceptionHandlingSpec -> exceptionHandlingSpec
                         .accessDeniedHandler((exchange, exception) -> Mono.error(exception)))
